@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2001904643110230846}
   - component: {fileID: 2001904643110230844}
   - component: {fileID: 2001904643110230819}
-  - component: {fileID: -3622597496995363622}
-  - component: {fileID: 4806984915561600508}
+  - component: {fileID: 4050362177519955346}
+  - component: {fileID: 4901160986449549915}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -88,7 +88,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.7
   m_Center: {x: 0, y: 0.7, z: 0}
---- !u!114 &-3622597496995363622
+--- !u!114 &4050362177519955346
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,7 +104,7 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &4806984915561600508
+--- !u!114 &4901160986449549915
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2001904643110230842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: f02c13cf5b2a1274cbaee531a54d27f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1
@@ -439,6 +439,7 @@ GameObject:
   - component: {fileID: 2001904643748394814}
   - component: {fileID: 2001904643748394812}
   - component: {fileID: 2001904643748394813}
+  - component: {fileID: 9160354236340114904}
   m_Layer: 0
   m_Name: PlayerVisual
   m_TagString: Untagged
@@ -497,6 +498,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2001904643110230846}
+--- !u!114 &9160354236340114904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001904643748394815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cc8733c1fe2e24ba20e65e9ccd1f46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 2001904643748394812}
 --- !u!1 &2001904644788084168
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,6 +696,11 @@ PrefabInstance:
     - target: {fileID: 1505502165548171982, guid: 12d9bf5aa92c13841abb9eec36b81afd,
         type: 3}
       propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1505502165548171982, guid: 12d9bf5aa92c13841abb9eec36b81afd,
+        type: 3}
+      propertyPath: emitterVelocityMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

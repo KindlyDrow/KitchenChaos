@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -30,7 +31,7 @@ public class DeliveryImageUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void DeliveryManger_OnRecipeFailed(object sender, DeliveryManager.PositionOfDelivery e)
+    private void DeliveryManger_OnRecipeFailed(object sender, EventArgs e)
     {
         gameObject.SetActive(true);
         backgroundImage.color = failedColor;
@@ -39,7 +40,7 @@ public class DeliveryImageUI : MonoBehaviour
         animator.SetTrigger(IS_DELIVERED);
     }
 
-    private void DeliveryManger_OnRecipeSuccess(object sender, DeliveryManager.PositionOfDelivery e)
+    private void DeliveryManger_OnRecipeSuccess(object sender, EventArgs e)
     {
         gameObject.SetActive(true);
         backgroundImage.color = successColor;

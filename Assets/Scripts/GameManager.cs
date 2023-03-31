@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
     {
         GameInput.Instanse.OnESC += GameInput_OnESC;
         GameInput.Instanse.OnInteractAction += GameInput_OnInteractAction;
+
+        //DEBUG ONLY
+        ChangeState(State.CountdownToStart);
     }
 
     private void GameInput_OnInteractAction(object sender, EventArgs e)

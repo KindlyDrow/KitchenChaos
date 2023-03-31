@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class SoundManager : MonoBehaviour
 {
@@ -32,7 +28,7 @@ public class SoundManager : MonoBehaviour
         DeliveryManager.Instance.OnRecipeFailed += DeliveryManager_OnRecipeFailed;
         DeliveryManager.Instance.OnRecipeSuccess += DeliveryManager_OnRecipeSuccess;
         CuttingCounter.OnAnyCut += CuttingCounter_OnAnyCut;
-        Player.Instance.OnPickedSomth += Player_OnPickedSomth;
+        //Player.Instance.OnPickedSomth += Player_OnPickedSomth;
         BaseCounter.OnAnyObjectPlaced += BaseCounter_OnAnyObjectPlaced;
         TrashCounter.OnSomthTrashed += TrashCounter_OnSomthTrashed;
         SetMusicVolume(globalMusicVolume);
@@ -53,7 +49,7 @@ public class SoundManager : MonoBehaviour
 
     private void Player_OnPickedSomth(object sender, System.EventArgs e)
     {
-        PlaySound(soundListSO.objectPickup, Player.Instance.transform.position);
+        //PlaySound(soundListSO.objectPickup, Player.Instance.transform.position);
     }
 
     private void CuttingCounter_OnAnyCut(object sender, System.EventArgs e)

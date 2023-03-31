@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IKitchenObjectParent
+public class Player : NetworkBehaviour, IKitchenObjectParent
 {
-    public static Player Instance { get; private set; }
+    //public static Player Instance { get; private set; }
 
 
     [SerializeField] Transform _kitchenObjectHoldPoint;
@@ -45,15 +46,16 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void Awake()
     {
+        gameInput = GameInput.Instanse;
         playerRigidbody = GetComponent<Rigidbody>();
-        if (Instance != null)
-        {
-            Debug.Log("There is more than one Player instance");
-        }
-        else
-        {
-            Instance = this;
-        }
+        //if (instance != null)
+        //{
+        //    debug.log("there is more than one player instance");
+        //}
+        //else
+        //{
+        //    instance = this;
+        //}
     }
 
     private void Start()
@@ -82,6 +84,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void FixedUpdate()
     {
+        if (!IsOwner) 
+        {
+            return; 
+        }
         HandleInteraction();
         HandleMovement();
     }

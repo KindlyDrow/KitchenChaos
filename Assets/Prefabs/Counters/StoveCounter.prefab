@@ -639,7 +639,8 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.462
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5818264422506377977, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
 --- !u!1 &6426438806212925640 stripped
 GameObject:
@@ -666,6 +667,22 @@ MonoBehaviour:
   stoveCounterVisual: {fileID: 1888090823}
   progressBarUI: {fileID: 3855683346770811521}
   stoveCounterSound: {fileID: 8359426679725115243}
+--- !u!114 &-4019120008519570264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6426438806212925640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!4 &6426438806212925646 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1334787140694956301, guid: ae418d8119c68d64486965d601bd3c67,

@@ -54,7 +54,7 @@ public class StoveCounter : BaseCounter
 
                         if (fryingTimer > fryingRecipe.fryingTimerMax)
                         {
-                            KitchenObject.DestroySelf();
+                            KitchenObject.DestroyKitchenObject(KitchenObject);
 
                             KitchenObject.SpawnKitchenObject(fryingRecipe.output, this);
 
@@ -93,7 +93,7 @@ public class StoveCounter : BaseCounter
                 if (HasRecipeWithInput(player.KitchenObject.KitchenObjectSO))
                 {
                     //Player carrying something that can be fried
-                    player.KitchenObject.KitchenObjectParent = this;
+                    player.KitchenObject.SetKitchenObjectParent(this);
                     fryingRecipe = GetFryingRecipeSOWithInput(KitchenObject.KitchenObjectSO);
                     fryingTimer = 0f;
                     ChangeState(State.Frying);
@@ -119,7 +119,7 @@ public class StoveCounter : BaseCounter
                     //Player carrying palate
                     if (plateKitchenObject.TryAddIngredient(KitchenObject.KitchenObjectSO))
                     {
-                        KitchenObject.DestroySelf();
+                        KitchenObject.DestroyKitchenObject(KitchenObject);
 
                         ChangeState(State.Idle);
                     }
@@ -127,7 +127,7 @@ public class StoveCounter : BaseCounter
             }
             else
             {
-                KitchenObject.KitchenObjectParent = player;
+                KitchenObject.SetKitchenObjectParent(player);
                 ChangeState(State.Idle);
                 //Player not carrying anything and player grabb it
             }

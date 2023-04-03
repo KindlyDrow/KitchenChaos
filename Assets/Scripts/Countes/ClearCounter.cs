@@ -13,7 +13,7 @@ public class ClearCounter : BaseCounter
             //There is no kitchenObject here
             if(player.KitchenObject != null)
             {
-                player.KitchenObject.KitchenObjectParent = this;
+                player.KitchenObject.SetKitchenObjectParent(this);
                 //Player carrying something and we change parent of smth
             }
             else
@@ -32,7 +32,7 @@ public class ClearCounter : BaseCounter
                     //Player carrying palate
                     if (plateKitchenObject.TryAddIngredient(KitchenObject.KitchenObjectSO))
                     {
-                        KitchenObject.DestroySelf();
+                        KitchenObject.DestroyKitchenObject(KitchenObject);
                     }
                 }
                 else
@@ -43,14 +43,14 @@ public class ClearCounter : BaseCounter
                         //There is plate on counter
                         if (plateKitchenObject.TryAddIngredient(player.KitchenObject.KitchenObjectSO))
                         {
-                            player.KitchenObject.DestroySelf();
+                            KitchenObject.DestroyKitchenObject(player.KitchenObject);
                         }
                     }
                 }
             }
             else
             {
-                KitchenObject.KitchenObjectParent = player;
+                KitchenObject.SetKitchenObjectParent(player);
                 //Player not carrying anything and player grabb it
             }
         }

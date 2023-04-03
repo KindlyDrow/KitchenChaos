@@ -7,22 +7,20 @@ public class SelectedCounterVisual : MonoBehaviour
 
     [SerializeField] private BaseCounter baseCounter;
     [SerializeField] private GameObject[] visualGameObjectArray;
-    private bool waitingForPlayer;
+
     private void Start()
     {
-        waitingForPlayer = true;
+        StartCoroutine(WaitForPlayerConnection());
     }
 
-    private void Update()
+    private IEnumerator WaitForPlayerConnection()
     {
-        if (waitingForPlayer)
+        while (Player.LocalInstance == null)
         {
-            if (Player.LocalInstance != null)
-            {
-                Player.LocalInstance.OnSelectedCounterChanged += Player_OnSelectedCounterChanged;
-                waitingForPlayer = false;
-            }
+            yield return null;
         }
+
+        Player.LocalInstance.OnSelectedCounterChanged += Player_OnSelectedCounterChanged;
     }
 
     private void Player_OnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangedEventArg e)

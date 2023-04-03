@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -18,10 +19,10 @@ public class StoveCounter : BaseCounter
     [SerializeField] private ProgressBarUI progressBarUI;
     [SerializeField] private StoveCounterSound stoveCounterSound;
 
-    private float fryingTimer;
+    private NetworkVariable<float> fryingTimer = new NetworkVariable<float>(0f);
     private FryingRecipeSO fryingRecipe;
 
-    private State state;
+    private State state = State.Idle;
 
     private void Start()
     {
@@ -32,12 +33,14 @@ public class StoveCounter : BaseCounter
         if (progressBarUI == null)
         {
             progressBarUI = GetComponentInChildren<ProgressBarUI>();
-        }
-        ChangeState(State.Idle);    
+        }    
     }
 
     private void Update()
     {
+
+        if (!IsServer) return;
+
         if (KitchenObject != null)
         {
             switch (state)
@@ -49,30 +52,30 @@ public class StoveCounter : BaseCounter
                     if (HasRecipeWithInput(KitchenObject.KitchenObjectSO))
                     {
                         //Start Frying
+                        ChangeTimerServerRpc(fryingTimer.Value + Time.deltaTime);
+                        ChangeProgressBarServerRpc();
 
-                        ChangeTimer();
-
-                        if (fryingTimer > fryingRecipe.fryingTimerMax)
+                        if (fryingTimer.Value > fryingRecipe.fryingTimerMax)
                         {
                             KitchenObject.DestroyKitchenObject(KitchenObject);
 
                             KitchenObject.SpawnKitchenObject(fryingRecipe.output, this);
 
-                            fryingTimer = 0f;
+                            ChangeTimerServerRpc(0f);
 
                             if (HasRecipeWithInput(KitchenObject.KitchenObjectSO))
                             {
-                                fryingRecipe = GetFryingRecipeSOWithInput(KitchenObject.KitchenObjectSO);
+                                ChangeFryingRecipeServerRpc();
                             }
                             else
                             {
-                                ChangeState(State.Burned);
+                                ChangeStateServerRpc(State.Burned);
                             }
                         }
                     }
                     else
                     {
-                        ChangeState(State.Burned);
+                        ChangeStateServerRpc(State.Burned);
                     }
                     break;
                 case State.Burned:
@@ -89,14 +92,11 @@ public class StoveCounter : BaseCounter
             if (player.KitchenObject != null)
             {
                 //Player carrying something
-
-                if (HasRecipeWithInput(player.KitchenObject.KitchenObjectSO))
+                KitchenObject playerKitchenObject = player.KitchenObject;
+                if (HasRecipeWithInput(playerKitchenObject.KitchenObjectSO))
                 {
                     //Player carrying something that can be fried
-                    player.KitchenObject.SetKitchenObjectParent(this);
-                    fryingRecipe = GetFryingRecipeSOWithInput(KitchenObject.KitchenObjectSO);
-                    fryingTimer = 0f;
-                    ChangeState(State.Frying);
+                    InteractLogicPlaceObjectServerRpc(playerKitchenObject.NetworkObject);
 
                 } else
                 {
@@ -111,29 +111,49 @@ public class StoveCounter : BaseCounter
         else
         {
             //There is a kitchenObject here
-            if (player.KitchenObject != null)
+            KitchenObject playerKitchenObject = player.KitchenObject;
+            if (playerKitchenObject != null)
             {
                 //Player carrying somethingh
-                if (player.KitchenObject.TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                if (playerKitchenObject.TryGetPlate(out PlateKitchenObject plateKitchenObject))
                 {
                     //Player carrying palate
                     if (plateKitchenObject.TryAddIngredient(KitchenObject.KitchenObjectSO))
                     {
                         KitchenObject.DestroyKitchenObject(KitchenObject);
 
-                        ChangeState(State.Idle);
+                        ChangeStateServerRpc(State.Idle);
                     }
                 }
             }
             else
             {
                 KitchenObject.SetKitchenObjectParent(player);
-                ChangeState(State.Idle);
+                ChangeStateServerRpc(State.Idle);
                 //Player not carrying anything and player grabb it
             }
         }
 
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void InteractLogicPlaceObjectServerRpc(NetworkObjectReference kitchenObjectNOR)
+    {
+        InteractLogicPlaceObjectClientRpc(kitchenObjectNOR);
+    }
+
+    [ClientRpc]
+    private void InteractLogicPlaceObjectClientRpc(NetworkObjectReference kitchenObjectNOR)
+    {
+        kitchenObjectNOR.TryGet(out NetworkObject kitchenObjectNO);
+        KitchenObject kitchenObject = kitchenObjectNO.GetComponent<KitchenObject>();
+        kitchenObject.SetKitchenObjectParent(this);
+        fryingRecipe = GetFryingRecipeSOWithInput(kitchenObject.KitchenObjectSO);
+        ChangeTimerServerRpc(0f);
+        ChangeStateServerRpc(State.Frying);
+
+    }
+
     private bool HasRecipeWithInput(KitchenObjectSO inputKitchenObjectSO)
     {
         FryingRecipeSO fryingRecipeSO = GetFryingRecipeSOWithInput (inputKitchenObjectSO);
@@ -165,22 +185,22 @@ public class StoveCounter : BaseCounter
         return null;
     }
 
-    private void ChangeTimer()
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangeStateServerRpc(State state)
     {
-        fryingTimer += Time.deltaTime;
-        ChangeProgressBar();
-
+        ChangeStateClientRpc(state);
     }
 
-    private void ChangeState(State state)
+    [ClientRpc]
+    private void ChangeStateClientRpc(State state)
     {
         switch (state)
         {
             case State.Idle:
                 stoveCounterVisual.Hide();
                 stoveCounterSound.PlaySound(false);
-                fryingTimer = 0f;
-                ChangeProgressBar();
+                ChangeTimerServerRpc(0f);
+                ChangeProgressBarServerRpc();
 
                 this.state = state;
                 break;
@@ -198,18 +218,45 @@ public class StoveCounter : BaseCounter
         }
     }
 
-    private void ChangeProgressBar()
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangeProgressBarServerRpc()
+    {
+        ChangeProgressBarClientRpc();
+    }
+
+    [ClientRpc]
+    private void ChangeProgressBarClientRpc()
     {
         if (progressBarUI != null)
         {
             if (fryingRecipe != null)
             {
-                progressBarUI.SetBarProgress(fryingTimer / fryingRecipe.fryingTimerMax, !HasRecipeWithInput(fryingRecipe.output));
+                progressBarUI.SetBarProgress(fryingTimer.Value / fryingRecipe.fryingTimerMax, !HasRecipeWithInput(fryingRecipe.output));
             }
             else
             {
-                progressBarUI.SetBarProgress(fryingTimer, false);
+                progressBarUI.SetBarProgress(fryingTimer.Value, false);
             }
         }
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangeTimerServerRpc(float value)
+    {
+        fryingTimer.Value = value;
+    }
+
+    [ServerRpc]
+    private void ChangeFryingRecipeServerRpc()
+    {
+        ChangeFryingRecipeClientRpc();
+    }
+
+    [ClientRpc]
+    private void ChangeFryingRecipeClientRpc()
+    {
+        fryingRecipe = GetFryingRecipeSOWithInput(KitchenObject.KitchenObjectSO);
+        Debug.Log("FryingRecepyChanged");
+    }
+
 }

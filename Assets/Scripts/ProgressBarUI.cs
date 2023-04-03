@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +19,7 @@ public class ProgressBarUI : MonoBehaviour
 
     private void Start()
     {
+        HideWarning();
         barImage.fillAmount = 0f;
     }
     public void SetBarProgress(float barProgress, bool isCooked)
@@ -42,11 +41,19 @@ public class ProgressBarUI : MonoBehaviour
                 }
 
             } else 
-            { 
-                warningImage.gameObject.SetActive(false);
-                animator.SetBool(IS_WARNING, false);
+            {
+                HideWarning();
 
             }
+        }
+    }
+
+    private void HideWarning()
+    {
+        if (warningImage != null)
+        {
+            animator.SetBool(IS_WARNING, false);
+            warningImage.gameObject.SetActive(false);
         }
     }
 }

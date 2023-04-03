@@ -368,6 +368,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -5818264422506377977, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
+    - {fileID: 4161196954921814472, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
 --- !u!4 &299659630665589650 stripped
 Transform:
@@ -400,22 +401,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8892e6481986441449eaa7ac889d1b70, type: 2}
   - {fileID: 11400000, guid: 0b00da81f80380844bfe9a3afcf81263, type: 2}
   progressBarUI: {fileID: 2182542112987668870}
---- !u!114 &-4552436645521854566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 299659630665589652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!4 &2582438777486172542 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3852879437976099809, guid: ae418d8119c68d64486965d601bd3c67,

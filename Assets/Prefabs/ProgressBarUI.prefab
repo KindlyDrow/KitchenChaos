@@ -285,6 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barImage: {fileID: 8287480177924010866}
+  warningImage: {fileID: 0}
 --- !u!114 &3155846791530290680
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,11 +6,10 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour, IKitchenObjectParent
 {
-    public event EventHandler OnAnyPlayerSpawned;
-
     public static Player LocalInstance { get; private set; }
 
     public static event EventHandler OnPickedSomth;
+
     public static void ResetStaticData()
     {
         OnPickedSomth = null;
@@ -67,8 +66,6 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         {
             LocalInstance = this;
         }
-
-        OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
     }
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
@@ -177,5 +174,10 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         this.selectedCounter = selectedCounter;
 
         OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArg { selectedCounter = selectedCounter });
+    }
+
+    public NetworkObject GetNetworkObject()
+    {
+        return NetworkObject;
     }
 }

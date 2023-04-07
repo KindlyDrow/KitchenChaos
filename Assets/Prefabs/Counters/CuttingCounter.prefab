@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barImage: {fileID: 6397603788127811293}
+  warningImage: {fileID: 0}
 --- !u!114 &1945458775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,7 +366,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5818264422506377977, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
+    - {fileID: 4161196954921814472, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
+    - {fileID: -5850614900188138234, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
+    - {fileID: -1238559447841193053, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ae418d8119c68d64486965d601bd3c67, type: 3}
 --- !u!4 &299659630665589650 stripped
 Transform:

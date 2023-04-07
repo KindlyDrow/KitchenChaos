@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlateKitchenObject : KitchenObject
@@ -29,7 +30,7 @@ public class PlateKitchenObject : KitchenObject
             else
             {
                 // Add new type
-                AddIngredient(kitchenObjectSO);
+                AddIngredientServerRpc(GameMultiplayer.Instance.GetKitchenObjectSOindex(kitchenObjectSO));
                 return true;
             }
         }
@@ -41,8 +42,16 @@ public class PlateKitchenObject : KitchenObject
 
     }
 
-    private void AddIngredient(KitchenObjectSO kitchenObjectSO)
+    [ServerRpc]
+    private void AddIngredientServerRpc(int kitchenObjectSOIndex)
     {
+        AddIngredientClientRpc(kitchenObjectSOIndex);
+    }
+
+    [ClientRpc]
+    private void AddIngredientClientRpc(int kitchenObjectSOIndex)
+    {
+        KitchenObjectSO kitchenObjectSO = GameMultiplayer.Instance.GetKitchenObjectSOByIndex(kitchenObjectSOIndex);
         m_kitchenObjectSOList.Add(kitchenObjectSO);
         OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs { kitchenObjectSO = kitchenObjectSO });
     }
